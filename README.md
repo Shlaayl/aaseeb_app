@@ -12,7 +12,7 @@ Under development: The basic functionality is still under development.
 - [Asseeb App](https://github.com/Shlaayl/aaseeb_app.git)
 
 ### Contributions 
-- [Rakan Shalayl](https://github.com/Shlaayl)
+- [Shlaayl](https://github.com/Shlaayl)
 
 
 ## Original app
