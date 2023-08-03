@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:meqate/pref.dart';
+import 'package:aaseeb_app/pref.dart';
 
 import 'home_screen.dart';
 

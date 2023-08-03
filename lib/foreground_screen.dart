@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:meqate/home_screen.dart';
-import 'package:meqate/models.dart';
-import 'package:meqate/pref.dart';
-import 'package:meqate/time_util.dart';
+import 'package:aaseeb_app/home_screen.dart';
+import 'package:aaseeb_app/models.dart';
+import 'package:aaseeb_app/pref.dart';
+import 'package:aaseeb_app/time_util.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'controller.dart';

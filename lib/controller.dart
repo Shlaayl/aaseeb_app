@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:meqate/models.dart';
-import 'package:meqate/time_util.dart';
+import 'package:aaseeb_app/models.dart';
+import 'package:aaseeb_app/time_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var prayers = [

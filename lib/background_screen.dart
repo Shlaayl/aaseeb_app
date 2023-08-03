@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meqate/models.dart';
+import 'package:aaseeb_app/models.dart';
+
 
 class BackGroundWidget extends StatefulWidget {
   const BackGroundWidget(this.currentPrayer, {Key? key}) : super(key: key);
