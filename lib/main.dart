@@ -24,7 +24,8 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => PrefsCore(),
       ),
-      ChangeNotifierProvider(create: (context) => ControllerCore())
+      ChangeNotifierProvider(create: (context) => ControllerCore()),
+       ChangeNotifierProvider(create: (context) => HadeethCore())
     ],
     child: const MyApp(),
   ));
