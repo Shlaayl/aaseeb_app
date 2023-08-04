@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:aaseeb_app/Core/core.dart';
+import 'package:aaseeb_app/Models/prayer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 
 import 'background_screen.dart';
-import 'controller.dart';
 import 'foreground_screen.dart';
-import 'models.dart';
+
 
 var firstTime = true;
 
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<ControllerCore>().
     updatePrayers(() {
       showDialog(
           context: context,
@@ -71,15 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
 
-      prayers = newPrayers;
+      context.read<ControllerCore>().prayers = newPrayers;
 
-      nextPrayer = getNextPrayer()!;
+      nextPrayer = context.read<ControllerCore>().getNextPrayer()!;
       if (nextPrayer.status == "now") currentPrayer = nextPrayer;
 
-      for (var element in prayers) {
+      for (var element in context.read<ControllerCore>().prayers) {
         if (element.selected) currentPrayer = element;
       }
-      reminderTime = calculateRemindTime(nextPrayer);
+      reminderTime = context.read<ControllerCore>().calculateRemindTime(nextPrayer);
 
       setState(() => visiblityLoader = false);
 
@@ -269,12 +272,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void update() {
     setState(() {
       firstTime = false;
-      nextPrayer = getNextPrayer()!;
+      nextPrayer = context.read<ControllerCore>().getNextPrayer()!;
       if (nextPrayer.status == "now") currentPrayer = nextPrayer;
-      for (var element in prayers) {
+      for (var element in context.read<ControllerCore>().prayers) {
         if (element.selected) currentPrayer = element;
       }
-      reminderTime = calculateRemindTime(nextPrayer);
+      reminderTime = context.read<ControllerCore>().calculateRemindTime(nextPrayer);
     });
   }
 

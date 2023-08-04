@@ -1,5 +1,6 @@
+import 'package:aaseeb_app/Models/prayer.dart';
 import 'package:flutter/material.dart';
-import 'package:aaseeb_app/models.dart';
+
 
 
 class BackGroundWidget extends StatefulWidget {

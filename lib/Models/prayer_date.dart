@@ -1,25 +1,7 @@
 import 'dart:convert';
+import 'package:aaseeb_app/Models/prayer.dart';
 
-class Prayer {
-  String time;
-  String title;
-  bool selected = false;
-  String status = "upcoming"; // now, upcoming, final
 
-  Prayer(this.time, this.title, this.selected);
-
-  Map<String, dynamic> toJson() => {
-        'time': time,
-        'title': title,
-        'selected': selected,
-        'status': status,
-      };
-
-  factory Prayer.fromJson(Map<String, dynamic> value) {
-    return Prayer(value["time"],value["title"],value["selected"]);
-  }
-
-}
 
 class PrayerDate {
   PrayerDate(this.date, this.prayers);

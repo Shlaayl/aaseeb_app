@@ -1,26 +1,33 @@
 import 'dart:io';
 
+import 'package:aaseeb_app/Core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:aaseeb_app/pref.dart';
+import 'package:provider/provider.dart';
 
-import 'home_screen.dart';
+import 'Pages/home_screen.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-
-  await Prefs.init();
-
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => PrefsCore(),
+      ),
+      ChangeNotifierProvider(create: (context) => ControllerCore())
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -32,6 +39,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    context.read<PrefsCore>().init();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
