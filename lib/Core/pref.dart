@@ -1,16 +1,20 @@
 part of core;
 
-class PrefsCore extends ChangeNotifier{
-  static late SharedPreferences _prefs;
+class PrefsCore extends ChangeNotifier {
+  static SharedPreferences? _prefs;
 
-  // call this method from iniState() function of mainApp().
-   Future<SharedPreferences> init() async {
-    _prefs = await SharedPreferences.getInstance();
-    return _prefs;
+  PrefsCore() {
+    init().then((value) => _prefs=value);
   }
 
-   Future<bool> setString(String key, String value) async =>
-      await _prefs.setString(key, value);
+  // call this method from iniState() function of mainApp().
+  Future<SharedPreferences> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    return _prefs!;
+  }
 
-   String? getString(String key) => _prefs.getString(key);
+  Future<bool> setString(String key, String value) async =>
+      await _prefs!.setString(key, value);
+
+  String? getString(String key) => _prefs!.getString(key);
 }

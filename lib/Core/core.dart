@@ -1,19 +1,15 @@
 library core;
 
-
-import 'dart:convert';
 import 'dart:math';
 
-
 import 'package:aaseeb_app/Models/hadeeth.dart';
+import 'package:adhan_dart/adhan_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:aaseeb_app/Models/prayer_date.dart';
 import 'package:aaseeb_app/Functions/time_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:aaseeb_app/Models/prayer.dart';
-
+import 'package:aaseeb_app/Models/prayer.dart' as mod;
 
 part 'controller.dart';
 part 'pref.dart';

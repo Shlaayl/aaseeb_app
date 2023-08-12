@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'background_screen.dart';
 import 'foreground_screen.dart';
 
-
 var firstTime = true;
 
 class HomeScreen extends StatefulWidget {
@@ -25,82 +24,32 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Timer timer;
-  late Prayer nextPrayer = Prayer("s", "تقبل الله طاعتكم", false);
-  late Prayer? currentPrayer = Prayer("s", "s", false);
+  late Prayer nextPrayer = Prayer(title: "تقبل الله طاعتكم", selected: false);
+  late Prayer? currentPrayer = Prayer(title: "s", selected: false);
   late String reminderTime = "";
   bool visiblityLoader = true;
   var handlerError = false;
 
   @override
   void initState() {
-    super.initState();
-    context.read<ControllerCore>().
-    updatePrayers(() {
-      showDialog(
-          context: context,
-          builder: (_) =>  AlertDialog(
-                title: const Text(
-                  "Change location",
-                  style: TextStyle(fontSize: 18),
-                ),
-                content: const Text("Your location has been changed \npress refresh to reset data",
-                    style: TextStyle(fontSize: 12)),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Restart.restartApp(webOrigin: '[your main route]');
-                      },
-                      child: const Text(
-                        "Refresh",
-                        style: TextStyle(color: Color(0xffE26B26)),
-                      ))
-                ],
-                elevation: 22,
-              ),
-          barrierDismissible: false);
-    }).then((value) {
-      List<Prayer> newPrayers = [];
-      for (var element in value) {
-        if (element.title == "Imsak" || element.title == "Sunset") {
-        } else {
-          if (element.title == "Fajr") element.title = "الفجر";
-          if (element.title == "Sunrise") element.title = "الشروق";
-          if (element.title == "Dhuhr") element.title = "الظهر";
-          if (element.title == "Asr") element.title = "العصر";
-          if (element.title == "Maghrib") element.title = "المغرب";
-          if (element.title == "Isha") element.title = "العشاء";
-          element.time = element.time.substring(0, 5);
-          newPrayers.add(element);
-        }
-      }
+    context.read<ControllerCore>().getPrayer().then((value) {
+      visiblityLoader = true;
+      context.read<ControllerCore>().prayers = value;
 
-      context.read<ControllerCore>().prayers = newPrayers;
-
-      nextPrayer = context.read<ControllerCore>().getNextPrayer()!;
+      nextPrayer = context.read<ControllerCore>().getNextPrayer();
       if (nextPrayer.status == "now") currentPrayer = nextPrayer;
 
       for (var element in context.read<ControllerCore>().prayers) {
         if (element.selected) currentPrayer = element;
       }
-      reminderTime = context.read<ControllerCore>().calculateRemindTime(nextPrayer);
-
-      setState(() => visiblityLoader = false);
+      reminderTime =
+          context.read<ControllerCore>().calculateRemindTime(nextPrayer);
 
       //Update state every mint
       timer = Timer.periodic(const Duration(minutes: 1), (Timer t) => update());
-    }).catchError((e) {
-      showDialog(
-          context: context,
-          builder: (_) => const AlertDialog(
-                title: Text(
-                  "Bad internet",
-                  style: TextStyle(fontSize: 18),
-                ),
-                content: Text("No Internet connect \ncheck your internet and try again", style: TextStyle(fontSize: 12)),
-                elevation: 22,
-              ),
-          barrierDismissible: false);
+      setState(() => visiblityLoader = false);
     });
+    super.initState();
   }
 
   var firstUpdate = true;
@@ -122,8 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 35,
                   decoration: const BoxDecoration(
                       color: Color(0xcd195251),
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
                   child: const Icon(
                     Icons.keyboard_arrow_up_outlined,
                     color: Colors.white,
@@ -141,7 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0))),
+                                topLeft: Radius.circular(40.0),
+                                topRight: Radius.circular(40.0))),
                         child: SingleChildScrollView(
                           child: Stack(
                             alignment: AlignmentDirectional.topCenter,
@@ -149,15 +100,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                   height: 450,
                                   alignment: Alignment.bottomRight,
-                                  transform: Matrix4.translationValues(100, 270, 0.0),
+                                  transform:
+                                      Matrix4.translationValues(100, 270, 0.0),
                                   child: Opacity(
                                     opacity: 0.8,
                                     child: RotatedBox(
                                       quarterTurns: 1,
-                                      child: Image.asset(
-                                        "assets/Asset 2.png",
-                                        color: const Color(0xffE26B26).withOpacity(0.3),
-                                      ),
+                                      child: true
+                                          ? Container()
+                                          : Image.asset(
+                                              "assets/Asset 2.png",
+                                              color: const Color(0xffE26B26)
+                                                  .withOpacity(0.3),
+                                            ),
                                     ),
                                   )),
                               Column(
@@ -165,32 +120,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const SizedBox(height: 15),
-                                  Image.asset('assets/Logo_Original.png', width: 172, height: 92),
+                                  Image.asset('assets/Logo_Original.png',
+                                      width: 172, height: 92),
                                   const SizedBox(height: 18),
                                   const Text("تطبيق ميقاتي لمواعيد الصلاة"),
                                   const Text("تقبل الله طاعتكم"),
-                                  const Text("تم تصميم  و تطوير التطبيق من قبل شركة"),
-                                  const Text("Sky Services Group", style: secondTextStyle),
-                                  const Text("المختصة بتطوير التطبيقات و مواقع الويب و الاستضافة"),
+                                  const Text(
+                                      "تم تصميم  و تطوير التطبيق من قبل شركة"),
+                                  const Text("Sky Services Group",
+                                      style: secondTextStyle),
+                                  const Text(
+                                      "المختصة بتطوير التطبيقات و مواقع الويب و الاستضافة"),
                                   const SizedBox(height: 12),
                                   const Text("لمعرفة المزيد زورو موقعنا"),
                                   const SizedBox(height: 5),
                                   InkWell(
-                                    child: const Text("www.ssg-tech.com", style: TextStyle(color: Color(0xffE26B26),fontSize: 15)),
+                                    child: const Text("www.ssg-tech.com",
+                                        style: TextStyle(
+                                            color: Color(0xffE26B26),
+                                            fontSize: 15)),
                                     onTap: () async {
                                       log("Click me now !!!!!!!");
-                                      await launchUrl(Uri.parse( 'https://www.ssg-tech.com'));
+                                      await launchUrl(Uri.parse(
+                                          'https://www.ssg-tech.com'));
                                     },
                                   ),
                                   const SizedBox(height: 18),
                                   const Text("للتواصل معنا",
-                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 8),
                                   RichText(
                                     text: TextSpan(children: [
                                       const WidgetSpan(
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 4.0),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 4.0),
                                           child: Icon(
                                             Icons.email,
                                             color: Color(0xffE26B26),
@@ -199,10 +165,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       TextSpan(
                                           text: "info@ssg-tech.com",
-                                          style: const TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () async {
-                                              await launchUrl(Uri.parse("mailto:info@ssg-tech.com"));
+                                              await launchUrl(Uri.parse(
+                                                  "mailto:info@ssg-tech.com"));
                                             }),
                                     ]),
                                   ),
@@ -211,16 +179,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                     text: TextSpan(children: [
                                       const WidgetSpan(
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                                          child: Icon(Icons.whatshot, color: Color(0xffE26B26)),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 4.0),
+                                          child: Icon(Icons.whatshot,
+                                              color: Color(0xffE26B26)),
                                         ),
                                       ),
                                       TextSpan(
                                           text: "+963 955 310 484",
-                                          style: const TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () async {
-                                              await launchUrl(Uri.parse("tel:+963-955-310-484"));
+                                              await launchUrl(Uri.parse(
+                                                  "tel:+963-955-310-484"));
                                             }),
                                     ]),
                                   ),
@@ -230,16 +202,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         const WidgetSpan(
                                           child: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                                            child: Icon(Icons.phone, color: Color(0xffE26B26)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: Icon(Icons.phone,
+                                                color: Color(0xffE26B26)),
                                           ),
                                         ),
                                         TextSpan(
                                             text: "+963 11 3310 484",
-                                            style: const TextStyle(color: Colors.black),
+                                            style: const TextStyle(
+                                                color: Colors.black),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {
-                                                await launchUrl(Uri.parse("tel:+963-11-310-484"));
+                                                await launchUrl(Uri.parse(
+                                                    "tel:+963-11-310-484"));
                                               }),
                                       ],
                                     ),
@@ -262,7 +238,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     height: double.infinity,
                     alignment: Alignment.center,
-                    child: const CircularProgressIndicator(color: Color(0xFFE26B26)))),
+                    child: const CircularProgressIndicator(
+                        color: Color(0xFFE26B26)))),
           ],
         ),
       ),
@@ -270,15 +247,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void update() {
-    setState(() {
-      firstTime = false;
-      nextPrayer = context.read<ControllerCore>().getNextPrayer()!;
-      if (nextPrayer.status == "now") currentPrayer = nextPrayer;
-      for (var element in context.read<ControllerCore>().prayers) {
-        if (element.selected) currentPrayer = element;
-      }
-      reminderTime = context.read<ControllerCore>().calculateRemindTime(nextPrayer);
-    });
+    // setState(() {
+    //   firstTime = false;
+    //   nextPrayer = context.read<ControllerCore>().getNextPrayer()!;
+    //   if (nextPrayer.status == "now") currentPrayer = nextPrayer;
+    //   for (var element in context.read<ControllerCore>().prayers) {
+    //     if (element.selected) currentPrayer = element;
+    //   }
+    //   reminderTime =
+    //       context.read<ControllerCore>().calculateRemindTime(nextPrayer);
+    // });
   }
 
   @override

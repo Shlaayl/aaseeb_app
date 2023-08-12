@@ -21,9 +21,9 @@ class AnimationWidget extends StatelessWidget {
                 opacity: 0.8,
                 child: RotatedBox(
                     quarterTurns: 1,
-                    child: Image.asset(
+                    child: false? Image.asset(
                       "assets/Asset 2.png",
-                    )),
+                    ):const SizedBox()),
               ),
             ),
           )),

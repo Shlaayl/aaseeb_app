@@ -45,14 +45,14 @@ class _BackGroundWidgetState extends State<BackGroundWidget> {
         child: ClipRRect(
           borderRadius:
               const BorderRadius.only(bottomRight: Radius.circular(30), bottomLeft: Radius.circular(30)),
-          child: Image.asset(image, fit: BoxFit.fitWidth, width: double.infinity),
+          child:false? Image.asset(image, fit: BoxFit.fitWidth, width: double.infinity):Container(),
         ),
       ),
       Container(
         alignment: Alignment.bottomRight,
         transform: Matrix4.translationValues(70, 270, 0.0),
         child: Opacity(
-            opacity: 0.8, child: RotatedBox(quarterTurns: 1, child: Image.asset("assets/Asset 2.png"))),
+            opacity: 0.8, child: RotatedBox(quarterTurns: 1, child:false? Image.asset("assets/Asset 2.png"):Container())),
       )
     ]
         // child: FlutterLogo(size: 200),

@@ -25,10 +25,20 @@ class _ForeGroundWidgetState extends State<ForeGroundWidget> {
   var screenHeight = 0.0;
 
   var screenWidth = 0.0;
+  var country = "";
+  var city = "";
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PrefsCore>().init().then((value) {
+      country = value.getString('country') ?? "";
+      city = value.getString('city') ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final prefs = context.read<PrefsCore>();
     cardWidth = MediaQuery.of(context).size.width / 1.2;
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
@@ -42,7 +52,7 @@ class _ForeGroundWidgetState extends State<ForeGroundWidget> {
           Container(
             margin: const EdgeInsets.all(8),
             child: Text(
-              "${prefs.getString('country') ?? ""}-${prefs.getString('city') ?? ""}",
+              "$country-$city",
               style: const TextStyle(color: Colors.white60),
             ),
           ),
@@ -62,10 +72,11 @@ class _ForeGroundWidgetState extends State<ForeGroundWidget> {
       margin: const EdgeInsets.only(right: 15, left: 15),
       child: Container(
         decoration: const BoxDecoration(
-            color: Color(0xffE5E5E5),
-            image: DecorationImage(
-                image: AssetImage("assets/card_background.png"),
-                fit: BoxFit.cover)),
+          color: Color(0xffE5E5E5),
+          // image: DecorationImage(
+          //     image: AssetImage("assets/card_background.png"),
+          //     fit: BoxFit.cover)
+        ),
         alignment: Alignment.center,
         padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: Column(
@@ -79,7 +90,8 @@ class _ForeGroundWidgetState extends State<ForeGroundWidget> {
                 return true;
               },
               child: SingleChildScrollView(
-                child: Text(" ${hadeethCore. getNewHead().title} \n ${hadeethCore.getNewHead().body}",
+                child: Text(
+                    " ${hadeethCore.getNewHead().title} \n ${hadeethCore.getNewHead().body}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontFamily: "Amiri", fontSize: 18),
                     textDirection: TextDirection.rtl),
@@ -121,7 +133,12 @@ class _ForeGroundWidgetState extends State<ForeGroundWidget> {
                 width: 55,
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
-                  child: amPm(prayer.time),
+                  child: Text(
+                    amPm(prayer.time)
+                    
+                    ,
+                    style: const TextStyle(fontSize: 22),
+                  ),
                 ),
               ),
               const SizedBox(width: 4),
